@@ -1,11 +1,20 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+
+from apps import core, auth, kanbans, notes, todos, users
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     yield
+
+def set_routers(app: FastAPI):
+    router = APIRouter(prefix="/api")
+
+    for app in [core, auth, kanbans, notes, todos, users]:
+        router.include_router(app.router.router)
+
 
 def get_app() -> FastAPI:
     app = FastAPI(lifespan=lifespan)
@@ -18,6 +27,8 @@ def get_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    set_routers(app)
+    
     return app
 
 app = get_app()
