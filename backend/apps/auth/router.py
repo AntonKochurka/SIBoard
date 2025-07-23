@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.responses import JSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from database import get_async_session
+from database import AsyncSession, get_async_session
 from .schemas import ObtainPairRequest, BlacklistTokenRequest, Payload
 from . import services, crud
 

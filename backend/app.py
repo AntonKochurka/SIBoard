@@ -13,7 +13,10 @@ def set_routers(app: FastAPI):
     router = APIRouter(prefix="/api")
 
     for app in [core, auth, kanbans, notes, todos, users]:
-        router.include_router(app.router.router)
+        api = app.router.router 
+        
+        if api:
+            router.include_router(api)
 
 
 def get_app() -> FastAPI:
