@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
+from database import engine
 from apps import auth, kanbans, notes, todos, users
 
 @asynccontextmanager

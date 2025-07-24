@@ -36,8 +36,8 @@ async def create_user(
     if identifier_test:
         raise HTTPException(status.HTTP_409_CONFLICT, detail="Identifier already taken")
 
-    user = await services.create_user(body, db)
-    return JSONResponse(user)
+    user = await services.create_user(db, body)
+    return UserResponse(**user.from_attributes())
 
 @router.patch("/{pk:int}", response_model=UserResponse)
 async def update_user(

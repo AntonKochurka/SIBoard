@@ -7,7 +7,7 @@ from . import crud, schemas
 
 async def create_user(db: AsyncSession, body: schemas.UserCreateRequest) -> User:
     user = User(**body.model_dump(exclude=["password"]))
-    user.set_password()
+    user.set_password(body.password)
 
     return await crud.create_user(db, user)
 
