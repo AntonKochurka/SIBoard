@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi.responses import JSONResponse
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database import get_async_session
@@ -29,8 +31,13 @@ async def get_single_user(
 async def create_user(
     body: UserCreateRequest, 
     db: AsyncSession = Depends(get_async_session)
-): ...
+): 
+    identifier_test = await crud.get_user_by_username_or_email(db, body.username, body.email)
+    if identifier_test:
+        raise HTTPException(status.HTTP_409_CONFLICT, detail="Identifier already taken")
 
+    user = await services.create_user(body, db)
+    return JSONResponse(user)
 
 @router.patch("/{pk:int}", response_model=UserResponse)
 async def update_user(
