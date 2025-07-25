@@ -25,7 +25,13 @@ async def get_users(
 async def get_single_user(
     pk: int, 
     db: AsyncSession = Depends(get_async_session)
-): ...
+): 
+    user = await crud.get_user_by_id(db, pk)
+
+    if not user:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
+
+    return UserResponse(**user.from_attributes())    
 
 @router.post("/", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def create_user(
