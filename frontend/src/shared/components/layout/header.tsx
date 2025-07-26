@@ -1,12 +1,23 @@
 import { useState, useEffect } from "react";
-import { FaSun, FaMoon, FaAlignJustify, FaUser } from "react-icons/fa";
+import { FaSun, FaMoon } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import AuthMenu from "./auth_menu";
 
 export default function Header() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("darkMode");
+      if (saved !== null) {
+        return saved === "true";
+      }
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    return false;
+  });
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
+    localStorage.setItem("darkMode", darkMode.toString());
   }, [darkMode]);
 
   return (
@@ -35,9 +46,9 @@ export default function Header() {
           }`}
         >
           {["Notes", "Todos", "Kanbans", "Pomodoro"].map((item) => (
-            <a
+            <Link
               key={item}
-              href="#"
+              to="#"
               className={`pb-1 border-b-2 transition-all ${
                 darkMode
                   ? "border-transparent hover:border-gray-600 hover:text-white"
@@ -45,27 +56,14 @@ export default function Header() {
               }`}
             >
               {item}
-            </a>
+            </Link>
           ))}
         </nav>
       </div>
 
       <div className="flex items-center space-x-4">
-        <button
-          className={`p-2 rounded-md transition-colors ${
-            darkMode ? "hover:bg-gray-800 text-gray-300" : "hover:bg-gray-200 text-gray-700"
-          }`}
-        >
-          <FaUser className="h-4 w-4" />
-        </button>
-        <button
-          className={`p-2 rounded-md transition-colors ${
-            darkMode ? "hover:bg-gray-800 text-gray-300" : "hover:bg-gray-200 text-gray-700"
-          }`}
-        >
-          <FaAlignJustify className="h-4 w-4" />
-        </button>
-
+        <AuthMenu darkMode={darkMode}/>
+    
         <button
           onClick={() => setDarkMode(!darkMode)}
           className={`p-2 rounded-md transition-colors ${
