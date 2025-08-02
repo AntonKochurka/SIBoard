@@ -24,8 +24,8 @@ const loggedInItems = [
 ];
 
 const loggedOutItems = [
-  { label: "Sign in", icon: FaSignInAlt, to: "/login" },
-  { label: "Create account", icon: FaUserPlus, to: "/register" },
+  { label: "Sign in", icon: FaSignInAlt, to: "/auth/signin" },
+  { label: "Create account", icon: FaUserPlus, to: "/auth/signup" },
 ];
 
 export default function AuthMenu({ darkMode }: { darkMode: boolean }) {
